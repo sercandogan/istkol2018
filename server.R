@@ -83,11 +83,11 @@ shinyServer(function(input, output) {
   }
   
   # Generate Plots
-  generate.plots <- function(samps, samp.means,r,n) {
+  generate.plots <- function(samps, samp.means, r, n, distName) {
     p1 <- qplot(samps, geom="histogram", bins=25, main="Sampling Distribution") +
       labs(x = "", y = "Frequency")
     p2 <- qplot(samp.means, geom="histogram", bins=25, main="Sampling Distribution of Mean ")+
-      labs(x = "", y = "Frequency")
+      labs(x = "", y = "Frequency") 
     grid.arrange(p1,p2)
   }
   
