@@ -72,7 +72,7 @@ shinyUI(
                   )
                 )),
         
-        # ANOTHER TAB ITEM --------------------------------------------
+        # CENTRAL LIMIT THEOREM --------------------------------------------
         tabItem(tabName = "clt",
                 fluidRow(
                   box(width = 8,
@@ -96,35 +96,35 @@ shinyUI(
                       sliderInput("samplesize", "Sample Size:", min=1, max=100, value=0.05),
                       conditionalPanel(
                         condition = "input.cltDistName == 'normal'",
-                        sliderInput("normalM", "Mean", min=0, max=100, value=0.4),
-                        sliderInput("normaSd", "Standard Deviation", min=1, max = 3, value = 1.2)
+                        sliderInput("cltNormalM", "Mean", min=0, max=100, value=0.4),
+                        sliderInput("cltNormalSd", "Standard Deviation", min=1, max = 3, value = 1.2)
                         
                       ),
                       conditionalPanel(
                         condition = "input.cltDistName == 'binom'",
-                        sliderInput("binomProb", "Probability of Success on each trail", min=0, max=1, value=0.4)
+                        sliderInput("cltBinomP", "Probability of Success on each trail", min=0, max=1, value=0.4)
                       ),
                       conditionalPanel(
                         condition = "input.cltDistName == 'uniform'",
-                        sliderInput("unifMin", "Min", min=0, max=100, value=50),
-                        sliderInput("unifMax", "Standard Deviation", min=0, max = 100, value = 75)
+                        sliderInput("cltUnifMin", "Min", min=0, max=100, value=50),
+                        sliderInput("cltUnifMax", "Standard Deviation", min=0, max = 100, value = 75)
                         
                       ),
                       conditionalPanel(
                         condition = "input.cltDistName == 'exponential'",
-                        sliderInput("expRate", "Rate", min=0, max=1, value=0.4)
+                        sliderInput("cltExpRate", "Rate", min=0, max=1, value=0.4)
                       ),
                       conditionalPanel(
                         condition = "input.cltDistName == 'poisson'",
-                        sliderInput("poisLambda", "Lambda", min=0.00, max=1.00, value=0.05)
+                        sliderInput("cltPoisLambda", "Lambda", min=0.00, max=1.00, value=0.05)
                       ),
                       conditionalPanel(
                         condition = "input.cltDistName == 'geometric'",
-                        sliderInput("geomProb", "Probability of Success in each trial", min=0, max=1, value=0.15)
+                        sliderInput("cltGeomProb", "Probability of Success in each trial", min=0, max=1, value=0.15)
                       ),
                       conditionalPanel(
                         condition = "input.cltDistName == 'nbinom'",
-                        sliderInput("nbinomProb", "Probability of Success in each trail", min=0, max=1, value=0.7)
+                        sliderInput("cltNbinomProb", "Probability of Success in each trail", min=0, max=1, value=0.7)
                       )
                       
                       

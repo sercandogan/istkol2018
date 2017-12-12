@@ -24,3 +24,6 @@ samps <- rpois(r*n, lambda = 3)  ## uniform distribution [0,1]
 samp.means <- sample.means(samps, r, n)
 # generate plots
 generate.plots(samps, samp.means)
+
+
+

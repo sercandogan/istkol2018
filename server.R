@@ -1,5 +1,6 @@
 library(tidyverse)
 library(shiny)
+library(gridExtra)
 set.seed(21102017)
 
 # Define server logic required to draw a histogram
@@ -81,9 +82,11 @@ shinyServer(function(input, output) {
   }
   
   # Generate Plots
-  generate.plots <- function(samps, samp.means) {
-    p1 <- qplot(samps, geom="histogram", bins=30, main="Sample Histogram")
-    p2 <- qplot(samp.means, geom="histogram", bins=30, main="Sample Mean Histogram")
+  generate.plots <- function(samps, samp.means,r,n) {
+    p1 <- qplot(samps, geom="histogram", bins=25, main="Sampling Distribution") +
+      labs(x = "", y = "Frequency")
+    p2 <- qplot(samp.means, geom="histogram", bins=25, main="Sampling Distribution of Mean ")+
+      labs(x = "", y = "Frequency")
     grid.arrange(p1,p2)
   }
   
@@ -92,19 +95,19 @@ shinyServer(function(input, output) {
     n <- input$samplesize # Sample Size
     r <- n ^ 2 # number of replications
     
-    samps <- switch(input$distName,
-                    "normal" = rnorm(r*n,input$normalM,input$normaSd),
-                    "binom" = rbinom(r*n,n,input$binomProb),
-                    "exponential" = rexp(r*n,input$expRate),
-                    "poisson" = rpois(r*n, input$poisLambda),
-                    "geometric" = rgeom(r*n, input$geomProb),
-                    "nbinom" = rnbinom(r*n,n,input$nbinomProb),
-                    "uniform" = runif(r*n, min = input$unifMin, max = input$unifMax))
+    samps <- switch(input$cltDistName,
+                    "normal" = rnorm(r*n,input$cltNormalM,input$cltNormalSd),
+                    "binom" = rbinom(r*n,n,input$cltBinomP),
+                    "exponential" = rexp(r*n,input$cltExpRate),
+                    "poisson" = rpois(r*n, input$cltPoisLambda),
+                    "geometric" = rgeom(r*n, input$cltGeomProb),
+                    "nbinom" = rnbinom(r*n,n,input$cltNbinomProb),
+                    "uniform" = runif(r*n, min = input$cltUnifMin, max = input$cltUnifMax))
     
     samp.means <- sample.means(samps,r,n)
      
     
-    generate.plots(samps,samp.means)
+    generate.plots(samps,samp.means,r,n)
   })
   
   
