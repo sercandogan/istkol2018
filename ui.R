@@ -46,7 +46,11 @@ shinyUI(
                                   max = 100,
                                   value = 10),
                       # Specific parameters for each distribution
-                      
+                      conditionalPanel(
+                        condition = "input.distName == 'normal'",
+                        sliderInput("normalM", "Mean", min=0, max=75, value=0),
+                        sliderInput("normalSd", "Standard Deviation", min=0, max=10, value=1.5)
+                      ),
                       conditionalPanel(
                         condition = "input.distName == 'binom'",
                         sliderInput("binomProb", "Probability of Success on each trail", min=0, max=1, value=0.4)

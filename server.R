@@ -12,11 +12,12 @@ shinyServer(function(input, output) {
     N <- input$nObs
     x <- seq(0,(N - 1))
     
+    
     if(input$distName == "normal"){
-      x1 <- dnorm(x, mean = mean(x), sd = sd(x))
+      x1 <- rnorm(N^2, mean = input$normalM, sd = input$normalSd)
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
-        stat_function(fun = dnorm, n = N ,args = list(mean = mean(x), sd = sd(x)), colour = "blue")  +
+      ggplot(data_frame(x1), aes(x1)) +
+        stat_function(fun = dnorm, n = N ,args = list(mean = input$normalM, sd = input$normalSd), colour = "blue")  +
         scale_x_continuous(name = '') +
         scale_y_continuous(name = '', labels = scales::percent)
     }else if(input$distName == "binom"){

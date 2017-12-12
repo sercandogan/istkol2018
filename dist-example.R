@@ -21,5 +21,7 @@ ggplot(data_frame(x,x1), aes(x,x1)) +
   scale_x_continuous(name = '') +
   scale_y_continuous(name = '', labels = scales::percent)
 
-
-
+# Normal Distribution with rnorm
+x2 <- rnorm(N^2,mean = 25, sd = 2)
+ggplot(data = data.frame(x2),aes(x2)) +
+  stat_function(fun = dnorm, n = N, args = list(mean = 25, sd = 2))
