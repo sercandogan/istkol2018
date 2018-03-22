@@ -12,8 +12,8 @@ shinyUI(
     dashboardSidebar(
       sidebarMenu(
         menuItem("Statistical Distributions", tabName = "dist", icon = icon("bar-chart")),
-        menuItem("Central Limit Theorem ", tabName = "clt", icon = icon("area-chart"))
-        
+        menuItem("Central Limit Theorem ", tabName = "clt", icon = icon("area-chart")),
+        menuItem("Simple Linear Regression", tabName = "regression", icon = icon("line-chart"))
       )
     ),
     dashboardBody(
@@ -44,7 +44,8 @@ shinyUI(
                                   label = 'Number of Observations',
                                   min = 1,
                                   max = 100,
-                                  value = 10),
+                                  value = 10,
+                                  animate = TRUE),
                       # Specific parameters for each distribution
                       conditionalPanel(
                         condition = "input.distName == 'normal'",
@@ -97,7 +98,7 @@ shinyUI(
                                               "Geometric" = 'geometric',
                                               "Negative Binomial" = "nbinom"
                                   )),
-                      sliderInput("samplesize", "Sample Size:", min=1, max=100, value=0.05),
+                      sliderInput("samplesize", "Sample Size:", min=1, max=100, value=0.05, animate = TRUE),
                       conditionalPanel(
                         condition = "input.cltDistName == 'normal'",
                         sliderInput("cltNormalM", "Mean", min=0, max=100, value=0.4),
@@ -135,10 +136,54 @@ shinyUI(
                       
                       
                   )
+                )),
+          # Simple Linear Regression --------------------------------
+        tabItem(tabName = "regression",
+                fluidRow(
+                  box(width = 8,
+                      plotOutput("regressionPlot")
+                  ),
+                  box(width = 4, 
+                      title = "", 
+                      status = "primary", 
+                      solidHeader = TRUE, # Default is TRUE (Solid Color of Header)
+                      helpText("HELP TEXT"),
+                      sliderInput("regressionN", "Number Of Observations", min=25, max=100, value=50),
+                      sliderInput("regressionB0", "Beta0", min=-10.00, max=10.00, value=5.00, step = 0.01),
+                      sliderInput("regressionB1", "Beta1", min=-5.00, max=5.00, value=2.22, step = 0.01),
+                      checkboxInput("regressionShowModel","Show model with OLS method"),
+                      checkboxInput("regressionHelpNotification", "Help me to fit model")
+                    )
+                ),
+                fluidRow(
+                     tabBox(   
+                        tabPanel(
+                            title = "Dataset (First 10 rows)",
+                            tableOutput("regressionTable") # Regression Table
+                            
+                        ),
+                        tabPanel(
+                            title = "Summary of Dataset",
+                            tableOutput("regressionSummaryDataset") # Regression Table
+                        )
+                     ),
+                     tabBox(
+                       tabPanel(
+                         title = "Information",
+                         htmlOutput("regressionInformationModel")
+                       ),
+                       tabPanel(
+                         title = "Model",
+                         conditionalPanel(
+                           condition = "input.regressionShowModel == true",
+                           htmlOutput("regressionRealInformation")
+                         )
+                        )
+                       )
+                     
                 )
-      
-              )
-
+        )
+        
     ))
 
 ))
