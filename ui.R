@@ -13,7 +13,8 @@ shinyUI(
       sidebarMenu(
         menuItem("Statistical Distributions", tabName = "dist", icon = icon("bar-chart")),
         menuItem("Central Limit Theorem ", tabName = "clt", icon = icon("area-chart")),
-        menuItem("Simple Linear Regression", tabName = "regression", icon = icon("line-chart"))
+        menuItem("Simple Linear Regression", tabName = "regression", icon = icon("line-chart")),
+        HTML("<a style='position:fixed;bottom:10px;margin-left:10px;' href='http://twitter.com/sergiostats'>@sergiostats</a>")
       )
     ),
     dashboardBody(
@@ -102,7 +103,7 @@ shinyUI(
                       conditionalPanel(
                         condition = "input.cltDistName == 'normal'",
                         sliderInput("cltNormalM", "Mean", min=0, max=100, value=0.4),
-                        sliderInput("cltNormalSd", "Standard Deviation", min=1, max = 3, value = 1.2)
+                        sliderInput("cltNormalSd", "Standard Deviation", min=1, max = 3, value = 1.2, step = 0.01)
                         
                       ),
                       conditionalPanel(
@@ -147,10 +148,10 @@ shinyUI(
                       title = "", 
                       status = "primary", 
                       solidHeader = TRUE, # Default is TRUE (Solid Color of Header)
-                      helpText("HELP TEXT"),
+                      helpText("Simple Linear Regression"),
                       sliderInput("regressionN", "Number Of Observations", min=25, max=100, value=50),
-                      sliderInput("regressionB0", "Beta0", min=-10.00, max=10.00, value=5.00, step = 0.01),
-                      sliderInput("regressionB1", "Beta1", min=-5.00, max=5.00, value=2.22, step = 0.01),
+                      sliderInput("regressionB0", "Beta0", min=-10.00, max=10.00, value=5.00, step = 0.001),
+                      sliderInput("regressionB1", "Beta1", min=-5.00, max=5.00, value=2.22, step = 0.001),
                       checkboxInput("regressionShowModel","Show model with OLS method"),
                       checkboxInput("regressionHelpNotification", "Help me to fit model")
                     )

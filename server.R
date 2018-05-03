@@ -21,61 +21,90 @@ shinyServer(function(input, output) {
     if(input$distName == "normal"){
       x1 <- rnorm(N^2, mean = input$normalM, sd = input$normalSd)
       
-      ggplot(data_frame(x1), aes(x1)) +
-        stat_function(fun = dnorm, n = N ,args = list(mean = input$normalM, sd = input$normalSd), colour = "blue")  +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+      p <- ggplot(data_frame(x1), aes(x1)) +
+        stat_function(fun = dnorm, 
+                      n = N ,
+                      args = list(mean = input$normalM, 
+                                  sd = input$normalSd),
+                      colour = "#348eb8") +
+        labs(title = "Normal Distribution")
+        
     }else if(input$distName == "binom"){
       x1 <- dbinom(x,N,input$binomProb)
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
+      p <- ggplot(data_frame(x,x1), aes(x,x1)) +
         geom_bar(aes(y = x1), stat = "identity") +
-        stat_function(fun = dbinom, n = N ,args = list(size = N, prob = input$binomProb), colour = "blue") +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+        stat_function(fun = dbinom, 
+                      n = N, 
+                      args = list(size = N, 
+                                  prob = input$binomProb), 
+                      colour = "#348eb8") +
+        labs(title = "Binomial Distribution")
+        
     }else if(input$distName == "poisson"){
       x1 <- dpois(x, lambda = input$poisLambda)
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
+      p <- ggplot(data_frame(x,x1), aes(x,x1)) +
         geom_bar(aes(y = x1), stat = "identity") +
-        stat_function(fun = dpois, n = N ,args = list(lambda = input$poisLambda), colour = "blue") +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+        stat_function(fun = dpois, 
+                      n = N,
+                      args = list(lambda = input$poisLambda),
+                      colour = "#348eb8") +
+        labs(title = "Poisson Distribution")
+        
       
     }else if(input$distName == "uniform"){
       x1 <- dunif(x, min = min(x), max(x))
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
-        stat_function(fun = dunif, n = N ,args = list(min = min(x), max = max(x)), colour = "blue")  +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+      p <- ggplot(data_frame(x,x1), aes(x,x1)) +
+        stat_function(fun = dunif, 
+                      n = N ,
+                      args = list(min = min(x),
+                                  max = max(x)), 
+                      colour = "#348eb8") +
+        labs(title = "Uniform Distribution")
+        
       
     }else if(input$distName == "exponential"){
       x1 <- dexp(x, rate = input$expRate)
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
-        stat_function(fun = dexp, n = N ,args = list(rate = input$expRate), colour = "blue")  +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+      p <- ggplot(data_frame(x,x1), aes(x,x1)) +
+        stat_function(fun = dexp, 
+                      n = N,
+                      args = list(rate = input$expRate),
+                      colour = "#348eb8") +
+        labs(title = "Exponential Distribution")
+        
     }else if(input$distName == "geometric"){
       x1 <- dgeom(x,input$geomProb)
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
+      p <- ggplot(data_frame(x,x1), aes(x,x1)) +
         geom_bar(aes(y = x1), stat = "identity") +
-        stat_function(fun = dgeom, n = N ,args = list(prob = input$geomProb), colour = "blue") +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+        stat_function(fun = dgeom, 
+                      n = N,
+                      args = list(prob = input$geomProb),
+                      colour = "#348eb8") +
+        labs(title = "Geometric Distribution")
+        
+        
     }else if(input$distName == "nbinom"){
       x1 <- dnbinom(x,N,input$nbinomProb)
       
-      ggplot(data_frame(x,x1), aes(x,x1)) +
+      p <- ggplot(data_frame(x,x1), aes(x,x1)) +
         geom_bar(aes(y = x1), stat = "identity") +
-        stat_function(fun = dnbinom, n = N ,args = list(size = N, prob = input$nbinomProb), colour = "blue") +
-        scale_x_continuous(name = '') +
-        scale_y_continuous(name = '', labels = scales::percent)
+        stat_function(fun = dnbinom,
+                      n = N,
+                      args = list(size = N, 
+                                  prob = input$nbinomProb), 
+                      colour = "#348eb8") +
+        labs(title = "Negative Binomial Distribution")
+        
     }else{
-      warning("There is a problem!")
+      stop("There is a problem!")
     }
+    
+    p + labs(x = "X", y = "Density") + theme_minimal()
+      
     
   })
   
@@ -90,9 +119,9 @@ shinyServer(function(input, output) {
   # Generate Plots
   generate.plots <- function(samps, samp.means, r, n, distName) {
     p1 <- qplot(samps, geom="histogram", bins=25, main="Sampling Distribution") +
-      labs(x = "", y = "Frequency")
+      labs(x = "", y = "Frequency") + theme_minimal()
     p2 <- qplot(samp.means, geom="histogram", bins=25, main="Sampling Distribution of Mean ")+
-      labs(x = "", y = "Frequency") 
+      labs(x = "", y = "Frequency") + theme_minimal()
     grid.arrange(p1,p2)
   }
   
@@ -133,7 +162,7 @@ shinyServer(function(input, output) {
   })
   
   data <- reactive({
-    beta <- runif(1,-1,1)*rnorm(1,3,1)
+    beta <- runif(1,-1,1) * rnorm(1,3,1)
     x <- runif(regN(),10,100)
     y <- runif(1,-10,10) + x * beta + rnorm(regN(),0,10)
     data <- tibble(x, y)
@@ -149,13 +178,15 @@ shinyServer(function(input, output) {
       geom_abline(slope = input$regressionB1, 
                   intercept = input$regressionB0,
                   colour = 'blue',
-                  size = 1)
+                  size = 1) +
+      geom_errorbar(aes(ymin = input$regressionB0 + x * input$regressionB1,
+                        ymax = y), alpha = 0.3)
     
     if(input$regressionShowModel){
-     p <-  p + geom_smooth(method = "lm", se = FALSE, colour = "red")
+     p <-  p + geom_smooth(method = "lm", se = FALSE, colour = "red") 
     }
     
-    p
+    p + theme_minimal()
       
   })
   
@@ -168,7 +199,16 @@ shinyServer(function(input, output) {
   })
   
   observeEvent({input$regressionB0 | input$regressionB1},{
-    showNotification(paste("Notification message"), duration = 3)
+    if(input$regressionHelpNotification){
+      mse_diff <- regressionTable()$mse - regressionOLS()$mse
+      if (mse_diff < 3) {
+        showNotification(paste("fitted! 💪"), duration = 3, type = "message")
+      } else if (mse_diff < 25){
+        showNotification(paste("get closer"), duration = 3, type = "warning")
+      } else {
+        showNotification(paste("You're far away"), duration = 3, type = "error")
+      }
+    }
   })
   
   y_predicted <- reactive({
@@ -201,10 +241,8 @@ shinyServer(function(input, output) {
     
     se_beta0 <- sqrt(var(error) * ((1/regN())+(x_mean^2)/ sum((data()$x-x_mean)^2)))
     se_beta1 <- sqrt(var(error) /  sum((data()$x-x_mean)^2))
-    p_beta0 <- 2 * pt(-abs((beta1-0)/se_beta1), df=regN()-2)
-    p_beta1 <- 2 * pt(-abs((beta0-0)/se_beta0), df=regN()-2)   
     
-    r_square <- 1 - (sum(error ^ 2) / sum((data()$y - y_mean) ^ 2))
+        r_square <- 1 - (sum(error ^ 2) / sum((data()$y - y_mean) ^ 2))
     mse <- sum(error ^ 2) / (regN() - 2)
     f_value <- (sum((data()$y - y_mean) ^ 2) - sum(error ^ 2)) / mse
     
@@ -215,8 +253,6 @@ shinyServer(function(input, output) {
         beta0 = beta0,
         se_beta0 = se_beta0,
         se_beta1 = se_beta1,
-        p_beta0 = p_beta0,
-        p_beta1 = p_beta1,
         r_square = r_square,
         f_value = f_value,
         mse = mse
@@ -247,8 +283,6 @@ shinyServer(function(input, output) {
          "B1: ", regressionOLS()$beta1, "<br>",
          "Standart Error of B0: ", regressionOLS()$se_beta0, "<br>",
          "Standart Error of B1: ", regressionOLS()$se_beta1, "<br>",
-         "p-value of B0: ", regressionOLS()$p_beta0, "<br>",
-         "p-value of B1: ", regressionOLS()$p_beta1, "<br>",
          "R^2: ", regressionOLS()$r_square, "<br>",
          "F: ", regressionOLS()$f_value, "<br>",
          "MSE: ", regressionOLS()$mse, "<br>",
